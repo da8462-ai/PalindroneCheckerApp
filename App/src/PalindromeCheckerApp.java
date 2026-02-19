@@ -1,12 +1,21 @@
-//Version 1.0
+//Version 2.0
 //Author Ajai
-//use case 1:Welcome Page
-public class PalindromeCheckerApp
-{
-    public static void main(String[] args)
-    {
-        System.out.println("Welcome to Palindrome Checker App Management System");
-        System.out.println("Version : 1.0");
-        System.out.println("System initialized Successfully");
+//use case 2 :Welcome Page
+public class PalindromeCheckerApp{
+
+    public static void main(String[] args) {
+        String word = "madam";
+        String reverse = "";
+
+        for (int i = word.length() - 1; i >= 0; i--) {
+            reverse += word.charAt(i);
+        }
+
+        if (word.equals(reverse)) {
+            System.out.println("It is a Palindrome");
+        } else {
+            System.out.println("It is not a Palindrome");
+        }
     }
 }
+
