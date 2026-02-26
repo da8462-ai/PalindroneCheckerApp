@@ -1,11 +1,20 @@
-//Version 7.0
+//Version 8.0
 //Author Ajai
-//use case 7 :Deque
-import java.util.Deque;
-import java.util.LinkedList;
+//use case 8 :Singly Linked List
 import java.util.Scanner;
 
 public class PalindromeCheckerApp {
+
+    // Node class for Singly Linked List
+    static class Node {
+        char data;
+        Node next;
+
+        Node(char data) {
+            this.data = data;
+            this.next = null;
+        }
+    }
 
     public static void main(String[] args) {
 
@@ -27,27 +36,61 @@ public class PalindromeCheckerApp {
 
     public static boolean checkPalindrome(String str) {
 
-        // Clean the string (remove spaces and convert to lowercase)
+        // Clean string (remove spaces & lowercase)
         String cleanedStr = str.replaceAll("\\s+", "").toLowerCase();
 
-        Deque<Character> deque = new LinkedList<>();
+        if (cleanedStr.length() == 0)
+            return true;
 
-        // Insert characters into deque
-        for (char ch : cleanedStr.toCharArray()) {
-            deque.addLast(ch);   // Insert at rear
+        // Step 1: Convert string to linked list
+        Node head = new Node(cleanedStr.charAt(0));
+        Node current = head;
+
+        for (int i = 1; i < cleanedStr.length(); i++) {
+            current.next = new Node(cleanedStr.charAt(i));
+            current = current.next;
         }
 
-        // Compare front and rear characters
-        while (deque.size() > 1) {
+        // Step 2: Find middle using fast & slow pointer
+        Node slow = head;
+        Node fast = head;
 
-            char front = deque.removeFirst();   // Remove from front
-            char rear = deque.removeLast();     // Remove from rear
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
 
-            if (front != rear) {
+        // Step 3: Reverse second half
+        Node secondHalf = reverseList(slow);
+
+        // Step 4: Compare first and second half
+        Node firstHalf = head;
+
+        while (secondHalf != null) {
+            if (firstHalf.data != secondHalf.data) {
                 return false;
             }
+            firstHalf = firstHalf.next;
+            secondHalf = secondHalf.next;
         }
 
         return true;
+    }
+
+    // Method to reverse linked list
+    public static Node reverseList(Node head) {
+
+        Node prev = null;
+        Node current = head;
+        Node next = null;
+
+        while (current != null) {
+            next = current.next;
+            current.next = prev;
+            prev = current;
+            current = next;
+        }
+
+        return prev;
     }
 }
