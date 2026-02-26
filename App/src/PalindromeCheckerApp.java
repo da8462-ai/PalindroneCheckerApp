@@ -1,10 +1,9 @@
-//Version 6.0
+//Version 7.0
 //Author Ajai
-//use case 5 :queue and stack
+//use case 7 :Deque
+import java.util.Deque;
 import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Scanner;
-import java.util.Stack;
 
 public class PalindromeCheckerApp {
 
@@ -31,18 +30,20 @@ public class PalindromeCheckerApp {
         // Clean the string (remove spaces and convert to lowercase)
         String cleanedStr = str.replaceAll("\\s+", "").toLowerCase();
 
-        Queue<Character> queue = new LinkedList<>();
-        Stack<Character> stack = new Stack<>();
+        Deque<Character> deque = new LinkedList<>();
 
-        // Enqueue and Push characters
+        // Insert characters into deque
         for (char ch : cleanedStr.toCharArray()) {
-            queue.add(ch);      // Enqueue (FIFO)
-            stack.push(ch);     // Push (LIFO)
+            deque.addLast(ch);   // Insert at rear
         }
 
-        // Compare dequeue from queue and pop from stack
-        while (!queue.isEmpty()) {
-            if (queue.remove() != stack.pop()) {
+        // Compare front and rear characters
+        while (deque.size() > 1) {
+
+            char front = deque.removeFirst();   // Remove from front
+            char rear = deque.removeLast();     // Remove from rear
+
+            if (front != rear) {
                 return false;
             }
         }
