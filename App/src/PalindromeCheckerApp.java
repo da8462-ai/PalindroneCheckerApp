@@ -1,40 +1,48 @@
-//Version 4.0
+//Version 5.0
 //Author Ajai
-//use case 4 :Welcome Page
+//use case 5 :FIFO Queue
+import java.util.Scanner;
+import java.util.Stack;
+
 public class PalindromeCheckerApp {
 
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
 
-        // Original String
-        String original = "madam";
+        System.out.print("Enter a string: ");
+        String input = scanner.nextLine();
 
-        // Convert String to Character Array (char[])
-        char[] characters = original.toCharArray();
+        boolean isPalindrome = checkPalindrome(input);
 
-        // Two-Pointer Technique
-        int start = 0;
-        int end = characters.length - 1;
-
-        boolean isPalindrome = true;
-
-        while (start < end) {
-
-            // Compare start & end characters using array indexing
-            if (characters[start] != characters[end]) {
-                isPalindrome = false;
-                break;
-            }
-
-            start++;
-            end--;
-        }
-
-        // Display result
         if (isPalindrome) {
-            System.out.println(original + " is a Palindrome");
+            System.out.println("The string is a palindrome.");
         } else {
-            System.out.println(original + " is NOT a Palindrome");
+            System.out.println("The string is NOT a palindrome.");
         }
+
+        scanner.close();
+    }
+
+    public static boolean checkPalindrome(String str) {
+
+        // Remove spaces and convert to lowercase (optional enhancement)
+        String cleanedStr = str.replaceAll("\\s+", "").toLowerCase();
+
+        Stack<Character> stack = new Stack<>();
+
+        // Push all characters into stack
+        for (int i = 0; i < cleanedStr.length(); i++) {
+            stack.push(cleanedStr.charAt(i));
+        }
+
+        // Pop characters and build reversed string
+        String reversed = "";
+        while (!stack.isEmpty()) {
+            reversed += stack.pop();
+        }
+
+        // Compare original cleaned string with reversed string
+        return cleanedStr.equals(reversed);
     }
 }
 
