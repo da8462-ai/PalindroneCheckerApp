@@ -1,6 +1,6 @@
-//Version 9.0
+//Version 10.0
 //Author Ajai
-//use case 9 :call stack
+//use case 10 :String and Array
 import java.util.Scanner;
 
 public class PalindromeCheckerApp {
@@ -12,13 +12,10 @@ public class PalindromeCheckerApp {
         System.out.print("Enter a string: ");
         String input = scanner.nextLine();
 
-        // Clean string (remove spaces & convert to lowercase)
-        String cleanedStr = input.replaceAll("\\s+", "").toLowerCase();
-
-        boolean result = isPalindrome(cleanedStr, 0, cleanedStr.length() - 1);
+        boolean result = checkPalindrome(input);
 
         if (result) {
-            System.out.println("The string is a palindrome.");
+            System.out.println("The string is a palindrome (ignoring spaces and case).");
         } else {
             System.out.println("The string is NOT a palindrome.");
         }
@@ -26,20 +23,28 @@ public class PalindromeCheckerApp {
         scanner.close();
     }
 
-    // Recursive Method
-    public static boolean isPalindrome(String str, int start, int end) {
+    public static boolean checkPalindrome(String str) {
 
-        // Base Condition
-        if (start >= end) {
-            return true;
+        // Step 1: Normalize string
+        // Remove spaces and convert to lowercase
+        String normalized = str.replaceAll("\\s+", "").toLowerCase();
+
+        // OPTIONAL (Advanced Improvement):
+        // Remove all non-alphanumeric characters
+        // String normalized = str.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+
+        // Step 2: Apply Two-Pointer Logic
+        int start = 0;
+        int end = normalized.length() - 1;
+
+        while (start < end) {
+            if (normalized.charAt(start) != normalized.charAt(end)) {
+                return false;
+            }
+            start++;
+            end--;
         }
 
-        // If characters do not match
-        if (str.charAt(start) != str.charAt(end)) {
-            return false;
-        }
-
-        // Recursive Call
-        return isPalindrome(str, start + 1, end - 1);
+        return true;
     }
 }
