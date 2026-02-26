@@ -1,20 +1,23 @@
-//Version 5.0
+//Version 6.0
 //Author Ajai
-//use case 5 :FIFO Queue
+//use case 5 :queue and stack
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
 import java.util.Stack;
 
 public class PalindromeCheckerApp {
 
     public static void main(String[] args) {
+
         Scanner scanner = new Scanner(System.in);
 
         System.out.print("Enter a string: ");
         String input = scanner.nextLine();
 
-        boolean isPalindrome = checkPalindrome(input);
+        boolean result = checkPalindrome(input);
 
-        if (isPalindrome) {
+        if (result) {
             System.out.println("The string is a palindrome.");
         } else {
             System.out.println("The string is NOT a palindrome.");
@@ -25,26 +28,25 @@ public class PalindromeCheckerApp {
 
     public static boolean checkPalindrome(String str) {
 
-        // Remove spaces and convert to lowercase (optional enhancement)
+        // Clean the string (remove spaces and convert to lowercase)
         String cleanedStr = str.replaceAll("\\s+", "").toLowerCase();
 
+        Queue<Character> queue = new LinkedList<>();
         Stack<Character> stack = new Stack<>();
 
-        // Push all characters into stack
-        for (int i = 0; i < cleanedStr.length(); i++) {
-            stack.push(cleanedStr.charAt(i));
+        // Enqueue and Push characters
+        for (char ch : cleanedStr.toCharArray()) {
+            queue.add(ch);      // Enqueue (FIFO)
+            stack.push(ch);     // Push (LIFO)
         }
 
-        // Pop characters and build reversed string
-        String reversed = "";
-        while (!stack.isEmpty()) {
-            reversed += stack.pop();
+        // Compare dequeue from queue and pop from stack
+        while (!queue.isEmpty()) {
+            if (queue.remove() != stack.pop()) {
+                return false;
+            }
         }
 
-        // Compare original cleaned string with reversed string
-        return cleanedStr.equals(reversed);
+        return true;
     }
 }
-
-
-
