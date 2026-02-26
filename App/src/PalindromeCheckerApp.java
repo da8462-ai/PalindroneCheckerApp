@@ -1,31 +1,27 @@
-//Version 11.0
+//Version 12.0
 //Author Ajai
-//use case 11 :Internal Stack/Array
-import java.util.Scanner;
-import java.util.Stack;
+//use case 12 :Varies per strategy
+import java.util.*;
 
-// Service Class following OOP principles
-class PalindromeChecker {
+// Strategy Interface
+interface PalindromeStrategy {
+    boolean check(String input);
+}
 
-    // Public method exposed to outside (Encapsulation)
-    public boolean checkPalindrome(String input) {
+// Concrete Strategy 1: Stack Based
+class StackStrategy implements PalindromeStrategy {
 
-        if (input == null) {
-            return false;
-        }
+    @Override
+    public boolean check(String input) {
 
-        // Normalize string (remove spaces & convert to lowercase)
-        String cleanedStr = input.replaceAll("\\s+", "").toLowerCase();
-
+        String cleaned = input.replaceAll("\\s+", "").toLowerCase();
         Stack<Character> stack = new Stack<>();
 
-        // Push all characters into stack
-        for (char ch : cleanedStr.toCharArray()) {
+        for (char ch : cleaned.toCharArray()) {
             stack.push(ch);
         }
 
-        // Compare characters using stack (LIFO)
-        for (char ch : cleanedStr.toCharArray()) {
+        for (char ch : cleaned.toCharArray()) {
             if (ch != stack.pop()) {
                 return false;
             }
@@ -35,20 +31,77 @@ class PalindromeChecker {
     }
 }
 
-// Main Application Class
+// Concrete Strategy 2: Deque Based
+class DequeStrategy implements PalindromeStrategy {
+
+    @Override
+    public boolean check(String input) {
+
+        String cleaned = input.replaceAll("\\s+", "").toLowerCase();
+        Deque<Character> deque = new LinkedList<>();
+
+        for (char ch : cleaned.toCharArray()) {
+            deque.addLast(ch);
+        }
+
+        while (deque.size() > 1) {
+            if (!deque.removeFirst().equals(deque.removeLast())) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+}
+
+// Context Class
+class PalindromeService {
+
+    private PalindromeStrategy strategy;
+
+    // Inject strategy dynamically
+    public PalindromeService(PalindromeStrategy strategy) {
+        this.strategy = strategy;
+    }
+
+    public void setStrategy(PalindromeStrategy strategy) {
+        this.strategy = strategy;
+    }
+
+    public boolean checkPalindrome(String input) {
+        return strategy.check(input);
+    }
+}
+
+// Main Application
 public class PalindromeCheckerApp {
 
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
 
+        System.out.println("Choose Algorithm:");
+        System.out.println("1. Stack Strategy");
+        System.out.println("2. Deque Strategy");
+        System.out.print("Enter choice (1 or 2): ");
+
+        int choice = scanner.nextInt();
+        scanner.nextLine(); // consume newline
+
+        PalindromeStrategy strategy;
+
+        if (choice == 1) {
+            strategy = new StackStrategy();
+        } else {
+            strategy = new DequeStrategy();
+        }
+
+        PalindromeService service = new PalindromeService(strategy);
+
         System.out.print("Enter a string: ");
         String input = scanner.nextLine();
 
-        // Create object of service class
-        PalindromeChecker checker = new PalindromeChecker();
-
-        boolean result = checker.checkPalindrome(input);
+        boolean result = service.checkPalindrome(input);
 
         if (result) {
             System.out.println("The string is a palindrome.");
